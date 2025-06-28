@@ -1,0 +1,124 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String   @id @default(uuid())
+  email         String   @unique
+  password      String
+  name          String?
+  role          Role     @default(USER)
+  kycStatus     KYCStatus @default(PENDING)
+  portfolios    Portfolio[]
+  investments   Investment[]
+  transactions  Transaction[]
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum KYCStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+model Portfolio {
+  id        String   @id @default(uuid())
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String
+  assets    PortfolioAsset[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model PortfolioAsset {
+  id          String   @id @default(uuid())
+  portfolio   Portfolio @relation(fields: [portfolioId], references: [id])
+  portfolioId String
+  asset       Asset     @relation(fields: [assetId], references: [id])
+  assetId     String
+  quantity    Float
+  avgPrice    Float
+}
+
+model Investment {
+  id          String   @id @default(uuid())
+  user        User     @relation(fields: [userId], references: [id])
+  userId      String
+  asset       Asset    @relation(fields: [assetId], references: [id])
+  assetId     String
+  amount      Float
+  type        InvestmentType
+  createdAt   DateTime @default(now())
+}
+
+enum InvestmentType {
+  BUY
+  SELL
+}
+
+model Asset {
+  id          String   @id @default(uuid())
+  symbol      String   @unique
+  name        String
+  category    AssetCategory
+  price       Float
+  priceHistory PriceHistory[]
+  portfolioAssets PortfolioAsset[]
+  investments Investment[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+enum AssetCategory {
+  STOCK
+  CRYPTO
+  FUND
+}
+
+model PriceHistory {
+  id        String   @id @default(uuid())
+  asset     Asset   @relation(fields: [assetId], references: [id])
+  assetId   String
+  price     Float
+  timestamp DateTime @default(now())
+}
+
+model Transaction {
+  id          String   @id @default(uuid())
+  user        User     @relation(fields: [userId], references: [id])
+  userId      String
+  type        TransactionType
+  amount      Float
+  status      TransactionStatus
+  createdAt   DateTime @default(now())
+}
+
+enum TransactionType {
+  DEPOSIT
+  WITHDRAWAL
+  INVESTMENT
+}
+
+enum TransactionStatus {
+  PENDING
+  COMPLETED
+  FAILED
+}

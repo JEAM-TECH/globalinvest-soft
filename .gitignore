@@ -1,0 +1,34 @@
+# Global .gitignore for GlobalInvestSoft
+# Node
+node_modules/
+dist/
+.env
+.env.*
+.DS_Store
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Logs
+logs/
+*.log
+
+# Prisma
+prisma/.env
+prisma/migrations/
+
+# VSCode
+.vscode/
+
+# Build
+build/
+coverage/
+
+# Others
+*.local
+*.cache

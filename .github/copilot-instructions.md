@@ -1,0 +1,3 @@
+<!-- Use this file to provide workspace-specific custom instructions to Copilot. For more details, visit https://code.visualstudio.com/docs/copilot/copilot-customization#_use-a-githubcopilotinstructionsmd-file -->
+
+This is a full-stack investment web app starter project (GlobalInvestSoft) with a React + Vite + TypeScript frontend and a NestJS + TypeScript backend. The backend will use Prisma, PostgreSQL, Redis, JWT auth, and Socket.IO. The frontend will use Tailwind CSS, Zustand, Recharts, and a blue-themed professional UI. Please generate code and suggestions that follow this architecture and best practices for security, modularity, and scalability.
